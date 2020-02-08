@@ -1,22 +1,24 @@
-var mongoose = require("mongoose");
+import { connect, connection, Schema, model } from "mongoose";
+import { config } from "dotenv";
+config({ path: ".env" });
 
-mongoose.connect(process.env.MONGO_URI);
-console.log("MongoDBConnectionState: " + mongoose.connection.readyState);
+connect(process.env.MONGO_URI);
+console.log("MongoDBConnectionState: " + connection.readyState);
 
 // Create URL Schema
-var userSchema = new mongoose.Schema({
+var userSchema = new Schema({
   name: { type: String, required: true }
 });
 
-var exerciseSchema = new mongoose.Schema({
+var exerciseSchema = new Schema({
   userId: { type: String, required: true },
   description: { type: String, required: true },
   duration: { type: Number, required: true },
   date: { type: Date, required: false }
 });
 
-var User = mongoose.model("User", userSchema);
-var Exercise = mongoose.model("Exercise", exerciseSchema);
+var User = model("User", userSchema);
+var Exercise = model("Exercise", exerciseSchema);
 
 function createUser(req, res) {
   User.findOne({ name: req.body.username }, (err, data) => {

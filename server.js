@@ -1,25 +1,20 @@
 // 'use strict';
-
-// This code is updated to 2020 version.
-
-// Imports
-require('dotenv').config({ path: '.env' });
-var express = require("express");
-var bodyParser = require("body-parser");
-var mongoose = require("mongoose");
-var cors = require("cors");
+import cors from "cors";
+import express from "express";
+import { urlencoded, json } from "body-parser";
+import {
+  createUser,
+  getAllUsers,
+  createExercise,
+  getExercisesByUserId
+} from "./business/index.js";
 
 var app = express();
 
 // Basic Configuration
-var port = process.env.PORT || 3000;
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-// db Configuration
-
-// var Schema = mongoose.Schema;
+app.use(urlencoded({ extended: false }));
+app.use(json());
 
 // Serve public folder
 app.use(express.static("public"));
@@ -29,23 +24,21 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/views/index.html");
 });
 
-const endpoints = require("./business/index.js");
-
 // Application EndPoints
 app.post("/api/exercise/new-user", (req, res) => {
-  return endpoints.createUser(req, res)
+  return createUser(req, res);
 });
 
 app.get("/api/exercise/users", (req, res) => {
-  return endpoints.getAllUsers(req, res)
+  return getAllUsers(req, res);
 });
 
 app.post("/api/exercise/add", (req, res) => {
-  return endpoints.createExercise(req, res)
+  return createExercise(req, res);
 });
 
 app.get("/api/exercise/log", (req, res) => {
-  return endpoints.getExercisesByUserId(req, res)
+  return getExercisesByUserId(req, res);
 });
 
 // Not found middleware
@@ -74,7 +67,6 @@ app.use((err, req, res, next) => {
     .send(errMessage);
 });
 
-
-const listener = app.listen(port, () => {
+const listener = app.listen(process.env.PORT || 3000, () => {
   console.log("Your app is listening on port " + listener.address().port);
 });
