@@ -1,6 +1,4 @@
 import { connect, connection, Schema, model } from "mongoose";
-import { config } from "dotenv";
-config({ path: ".env" });
 
 connect(process.env.MONGO_URI);
 console.log("MongoDBConnectionState: " + connection.readyState);
