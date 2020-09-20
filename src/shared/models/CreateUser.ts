@@ -1,0 +1,4 @@
+
+interface CreateUserBody {
+    name: string;
+}
